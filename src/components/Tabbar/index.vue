@@ -41,7 +41,7 @@ export default {};
   flex: 1;
   height: 40px;
 }
-#footer ul li.active {
+#footer ul li.router-link-active {
   color: #f03d37;
 }
 #footer ul i {
