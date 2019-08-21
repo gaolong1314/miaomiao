@@ -3,16 +3,20 @@
     <Header title="喵喵电影" />
     <div id="content">
       <div class="movie_menu">
-        <div class="city_name">
+        <router-link to="city" class="city_name" tag="div">
           <span>大连</span><i class="iconfont icon-lower-triangle"></i>
-        </div>
+        </router-link>
         <div class="hot_swtich">
-          <div class="hot_item active">正在热映</div>
-          <div class="hot_item">即将上映</div>
+          <router-link to="nowPlaying" class="hot_item" tag="div"
+            >正在热映</router-link
+          >
+          <router-link to="comingSoon" class="hot_item" tag="div"
+            >即将上映</router-link
+          >
         </div>
-        <div class="search_entry">
+        <router-link to="search" tag="div" class="search_entry">
           <i class="iconfont icon-sousuo"></i>
-        </div>
+        </router-link>
       </div>
       <keep-alive>
         <router-view />
@@ -36,8 +40,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-#content{ flex:1; overflow:auto; margin-bottom: 50px; position: relative; display: flex; flex-direction:column;}
+#content {
+  flex: 1;
+  overflow: auto;
+  margin-bottom: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 
 #content .movie_menu {
   width: 100%;
@@ -54,7 +64,7 @@ export default {
   height: 100%;
   line-height: 45px;
 }
-.movie_menu .city_name.active {
+.movie_menu .city_name.router-link-active {
   color: #ef4238;
   border-bottom: 2px #ef4238 solid;
 }
@@ -71,7 +81,7 @@ export default {
   margin: 0 12px;
   font-weight: 700;
 }
-.movie_menu .hot_item.active {
+.movie_menu .hot_item.router-link-active {
   color: #ef4238;
   border-bottom: 2px #ef4238 solid;
 }
@@ -80,7 +90,7 @@ export default {
   height: 100%;
   line-height: 45px;
 }
-.movie_menu .search_entry.active {
+.movie_menu .search_entry.router-link-active {
   color: #ef4238;
   border-bottom: 2px #ef4238 solid;
 }
@@ -88,4 +98,16 @@ export default {
   font-size: 24px;
   color: red;
 }
+
+// .slide-enter-active {
+//   animation: 13s detailMove;
+// }
+// @keyframes detailMove {
+//   0% {
+//     transform: translateX(100%);
+//   }
+//   100% {
+//     transform: translateX(0);
+//   }
+// }
 </style>
