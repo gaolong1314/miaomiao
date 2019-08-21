@@ -11,7 +11,7 @@
           <span>{{item.distance}}</span>
         </div>
         <div class="card">
-          <div>小吃</div>
+          <div v-for="(item1, index1) in item.tag" v-if="item1 === 1" :key="index1">{{item1|passCard}}</div>
           <div>折扣卡</div>
         </div>
       </li>
@@ -25,6 +25,11 @@ export default {
   data() {
     return {
       cinemaList:[]
+    }
+  },
+  filters:{
+    passCard(card){
+      return '折扣卡';
     }
   },
   mounted() {
