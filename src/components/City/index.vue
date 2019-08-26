@@ -1,25 +1,41 @@
 <template>
   <div class="city_body">
+    <!-- <div class="cityInfo"> -->
     <div class="city_list">
-      <div class="city_hot">
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li v-for="item in hotList" :key="item.id">
-            {{ item.nm }}
-          </li>
-        </ul>
-      </div>
-      <div class="city_sort" ref="city_sort">
-        <div v-for="(item1, index) in cityList" :key="index">
-          <h2>{{ item1.index }}</h2>
-          <ul>
-            <li v-for="(item2, index) in item1.list" :key="index">
-              {{ item2.nm }}
-            </li>
-          </ul>
+      <Loading v-if="loading" />
+      <Scroll v-else class="scroll" ref="scroll" :tap="true">
+        <div>
+          <div class="city_hot">
+            <h2>热门城市</h2>
+            <ul class="clearfix">
+              <li
+                v-for="item in hotList"
+                :key="item.id"
+                @tap="handleToCity(item.nm, item.id)"
+              >
+                {{ item.nm }}
+              </li>
+            </ul>
+          </div>
+          <div class="city_sort" ref="city_sort">
+            <div v-for="(item1, index) in cityList" :key="index">
+              <h2>{{ item1.index }}</h2>
+              <ul>
+                <li
+                  v-for="(item2, index) in item1.list"
+                  :key="index"
+                  @tap="handleToCity(item2.nm, item2.id)"
+                >
+                  {{ item2.nm }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
+      </Scroll>
     </div>
+    <!-- </div> -->
+
     <div class="city_index">
       <ul>
         <li
@@ -35,27 +51,44 @@
 </template>
 
 <script>
+import Scroll from "@/components/Scroller/Scroll";
 export default {
   name: "City",
   data() {
     return {
       cityList: [],
-      hotList: []
+      hotList: [],
+      loading: true
     };
   },
+  components: {
+    Scroll
+  },
   mounted() {
-    this.$axios
-      .get("/api/cityList")
-      .then(result => {
-        var msg = result.data.msg;
-        if (msg === "ok") {
-          var cities = result.data.data.cities;
-          var { cityList, hotList } = this.formatCityList(cities);
-          this.cityList = cityList;
-          this.hotList = hotList;
-        }
-      })
-      .catch(err => {});
+    var cityList = window.localStorage.getItem("cityList");
+    var hotList = window.localStorage.getItem("hotList");
+
+    if (cityList && hotList) {
+      this.cityList = JSON.parse(cityList);
+      this.hotList = JSON.parse(hotList);
+      this.loading = false;
+    } else {
+      this.$axios
+        .get("/api/cityList")
+        .then(result => {
+          var msg = result.data.msg;
+          if (msg === "ok") {
+            var cities = result.data.data.cities;
+            var { cityList, hotList } = this.formatCityList(cities);
+            this.cityList = cityList;
+            this.hotList = hotList;
+            this.loading = false;
+            window.localStorage.setItem("cityList", JSON.stringify(cityList));
+            window.localStorage.setItem("hotList", JSON.stringify(hotList));
+          }
+        })
+        .catch(err => {});
+    }
   },
   methods: {
     formatCityList(cities) {
@@ -109,14 +142,26 @@ export default {
       };
     },
     handToIndex(index) {
+      console.log("2323");
       var h2 = this.$refs.city_sort.getElementsByTagName("h2");
-      this.$refs.city_sort.parentElement.scrollTop =  h2[index].offsetTop;
+      this.$refs.scroll.scrollTo(0, -h2[index].offsetTop);
+      // this.$refs.city_sort.parentElement.scrollTop = h2[index].offsetTop;
+    },
+    handleToCity(nm, id) {
+      this.$store.state.city.nm = nm;
+      this.$store.state.city.id = id;
+      window.localStorage.setItem("nm", nm);
+      window.localStorage.setItem("id", id);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.scroll {
+  height: 100%;
+  width: 100%;
+}
 #content .city_body {
   margin-top: 45px;
   display: flex;
