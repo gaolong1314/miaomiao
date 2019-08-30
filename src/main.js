@@ -3,22 +3,24 @@ import App from './App.vue'
 import router from './routers'
 import store from './stores'
 import axios from 'axios';
-
+// require styles
+import 'swiper/dist/css/swiper.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 
 import Scroller from './components/Scroller';
-Vue.component('Scroller',Scroller);
+Vue.component('Scroller', Scroller);
 
 import Loading from '@/components/Loading';
-Vue.component('Loading',Loading);
+Vue.component('Loading', Loading);
 
 
-Vue.filter("setWH",(url,arg)=>{
-  return url.replace(/w\.h/,arg);
+Vue.filter("setWH", (url, arg) => {
+  return url.replace(/w\.h/, arg);
 })
 
+Vue.config.productionTip = false
 new Vue({
   router,
   store,

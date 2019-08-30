@@ -3,7 +3,11 @@
     <Loading v-show="loading" />
     <Scroller>
       <ul>
-        <li v-for="(item, index) in movieList" :key="index">
+        <li
+          v-for="(item, index) in movieList"
+          :key="index"
+          @tap="goToDetail(item.id)"
+        >
           <div class="pic_show">
             <img :src="item.img | setWH('128.180')" />
           </div>
@@ -54,6 +58,12 @@ export default {
         .catch(err => {
           this.loading = false;
         });
+    },
+    goToDetail(itemID) {
+      console.log("前往详情页" + itemID);
+      // this.$router.push('detail/'+itemID);
+      // this.$router.push({ name: "detail", params: { movieId: itemID } });
+      this.$router.push({ path: `detail/1/${itemID}` });
     }
   },
   // mounted() {

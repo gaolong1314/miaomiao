@@ -14,8 +14,12 @@
         </div>
       </div>
       <ul>
-        <li v-for="(item, index) in movieList" :key="index">
-          <div class="pic_show" @tap="handToDetail">
+        <li
+          v-for="(item, index) in movieList"
+          :key="index"
+          @tap="handToDetail(item.id)"
+        >
+          <div class="pic_show">
             <img :src="item.img | setWH('128.180')" />
           </div>
           <div class="info_list">
@@ -41,8 +45,11 @@ import { truncate } from "fs";
 export default {
   name: "ComingSoon",
   methods: {
-    handToDetail() {
-      console.log("111111111111");
+    handToDetail(itemID) {
+      console.log("前往详情页" + itemID);
+      // this.$router.push('detail/'+itemID);
+      // this.$router.push({ name: "detail", params: { movieId: itemID } });
+      this.$router.push({ path: `detail/2/${itemID}` });
     }
   },
   activated() {
@@ -52,7 +59,7 @@ export default {
       console.log("没有进行加载");
       return;
     }
-    
+
     this.$axios
       .get("/api/movieComingList?cityId=" + cityId)
       .then(result => {
